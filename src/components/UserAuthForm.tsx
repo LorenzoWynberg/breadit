@@ -16,16 +16,15 @@ const UserAuthForm: FC<UserAuthFormProps> = ({ className, ...props }) => {
   const loginWithGoogle = async () => {
     setIsLoading(true);
     try {
+      // TODO: Implement OAuth
       throw new Error('OAuth not implemented');
       await signIn('google');
     } catch (error) {
-      // TODO: 'Handle error with toast notification'
       toast({
         title: 'There was a problem.',
         description: 'There was an error logging in with Google.',
         variant: 'destructive',
       });
-      console.error(error);
     } finally {
       setIsLoading(false);
     }
