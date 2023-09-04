@@ -16,8 +16,6 @@ const UserAuthForm: FC<UserAuthFormProps> = ({ className, ...props }) => {
   const loginWithGoogle = async () => {
     setIsLoading(true);
     try {
-      // TODO: Implement OAuth
-      throw new Error('OAuth not implemented');
       await signIn('google');
     } catch (error) {
       toast({
