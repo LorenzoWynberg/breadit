@@ -12,7 +12,7 @@ const Navbar = async () => {
         <Link href="/" className="flex items-center gap-2">
           <Icons.logo className="w-8 h-8 sm:h-6" />
           <p className="hidden text-sm font-medium text-zinc-700 md:block">
-            Breadit
+            Breaddit
           </p>
         </Link>
         {/* Search Bar */}
