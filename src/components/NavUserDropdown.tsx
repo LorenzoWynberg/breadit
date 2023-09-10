@@ -9,7 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
-import UserAvatar from './UserAvatar';
+import { UserAvatar } from './UserAvatar';
 import Link from 'next/link';
 import { signOut } from 'next-auth/react';
 
