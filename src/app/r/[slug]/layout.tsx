@@ -1,3 +1,4 @@
+import SubscribeLeaveToggle from '@/components/SubscribeLeaveToggle';
 import { getAuthSession } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { format } from 'date-fns';
@@ -88,6 +89,14 @@ const Layout = async ({
                 <div className="flex justify-between py-3 gap-x-4">
                   <dt className="text-gray-500">You created this community</dt>
                 </div>
+              ) : null}
+
+              {subreddit.creatorId !== session?.user?.id ? (
+                <SubscribeLeaveToggle
+                  isSubscribed={isSubscribed}
+                  subredditId={subreddit.id}
+                  subredditName={subreddit.name}
+                />
               ) : null}
             </dl>
           </div>
