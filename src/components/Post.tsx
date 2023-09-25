@@ -12,10 +12,10 @@ interface PostProps {
     author: User;
   };
   subredditName: string;
-  commentAmt: number;
+  commentCount: number;
 }
 
-const Post: FC<PostProps> = ({ post, subredditName, commentAmt }) => {
+const Post: FC<PostProps> = ({ post, subredditName, commentCount }) => {
   const pRef = useRef<HTMLParagraphElement>(null);
 
   return (
@@ -63,7 +63,7 @@ const Post: FC<PostProps> = ({ post, subredditName, commentAmt }) => {
           href={`/r/${subredditName}/post/${post.id}`}
           className="flex items-center gap-2 w-fit"
         >
-          <MessageSquare className="w-4 h-4" /> {commentAmt} comments
+          <MessageSquare className="w-4 h-4" /> {commentCount} comments
         </Link>
       </div>
     </div>
