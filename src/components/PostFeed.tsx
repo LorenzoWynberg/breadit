@@ -8,24 +8,20 @@ import axios from 'axios';
 import { Loader2 } from 'lucide-react';
 import { FC, useEffect, useRef } from 'react';
 import Post from './Post';
-import { Session } from 'next-auth';
+import { useSession } from 'next-auth/react';
 
 interface PostFeedProps {
   initialPosts: ExtendedPost[];
   subredditName?: string;
-  session?: Session | null;
 }
 
-const PostFeed: FC<PostFeedProps> = ({
-  initialPosts,
-  subredditName,
-  session,
-}) => {
+const PostFeed: FC<PostFeedProps> = ({ initialPosts, subredditName }) => {
   const lastPostRef = useRef<HTMLElement>(null);
   const { ref, entry } = useIntersection({
     root: lastPostRef.current,
     threshold: 1,
   });
+  const { data: session } = useSession();
 
   const { data, fetchNextPage, isFetchingNextPage } = useInfiniteQuery(
     ['infinite-query'],
