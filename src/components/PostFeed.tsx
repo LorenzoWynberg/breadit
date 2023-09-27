@@ -8,13 +8,19 @@ import axios from 'axios';
 import { Loader2 } from 'lucide-react';
 import { FC, useEffect, useRef } from 'react';
 import Post from './Post';
+import { Session } from 'next-auth';
 
 interface PostFeedProps {
   initialPosts: ExtendedPost[];
   subredditName?: string;
+  session?: Session | null;
 }
 
-const PostFeed: FC<PostFeedProps> = ({ initialPosts, subredditName }) => {
+const PostFeed: FC<PostFeedProps> = ({
+  initialPosts,
+  subredditName,
+  session,
+}) => {
   const lastPostRef = useRef<HTMLElement>(null);
   const { ref, entry } = useIntersection({
     root: lastPostRef.current,
@@ -51,14 +57,24 @@ const PostFeed: FC<PostFeedProps> = ({ initialPosts, subredditName }) => {
   return (
     <ul className="flex flex-col col-span-2 space-y-6">
       {posts.map((post, index) => {
-        // TODO: Votes calculations
+        const voteCount = post.votes.reduce((acc, vote) => {
+          if (vote.type === 'UP') return acc + 1;
+          if (vote.type === 'DOWN') return acc - 1;
+          return acc;
+        }, 0);
+
+        const currentVote = post.votes.find(
+          (vote) => vote.userId === session?.user.id,
+        );
 
         if (index === posts.length - 1) {
           // Add a ref to the last post in the list
           return (
             <li key={post.id} ref={ref}>
               <Post
+                currentVote={currentVote}
                 post={post}
+                voteCount={voteCount}
                 commentCount={post.comments.length}
                 subredditName={post.subreddit.name}
               />
@@ -67,8 +83,10 @@ const PostFeed: FC<PostFeedProps> = ({ initialPosts, subredditName }) => {
         } else {
           return (
             <Post
+              currentVote={currentVote}
               key={post.id}
               post={post}
+              voteCount={voteCount}
               commentCount={post.comments.length}
               subredditName={post.subreddit.name}
             />
