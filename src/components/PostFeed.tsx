@@ -53,7 +53,7 @@ const PostFeed: FC<PostFeedProps> = ({
   }, [entry, fetchNextPage]);
 
   const posts = data?.pages.flatMap((page) => page) ?? initialPosts;
-
+  if (!posts && !initialPosts) return null;
   return (
     <ul className="flex flex-col col-span-2 space-y-6">
       {posts.map((post, index) => {
@@ -67,31 +67,19 @@ const PostFeed: FC<PostFeedProps> = ({
           (vote) => vote.userId === session?.user.id,
         );
 
-        if (index === posts.length - 1) {
-          // Add a ref to the last post in the list
-          return (
-            <li key={post.id} ref={ref}>
-              <Post
-                currentVote={currentVote}
-                post={post}
-                voteCount={voteCount}
-                commentCount={post.comments.length}
-                subredditName={post.subreddit.name}
-              />
-            </li>
-          );
-        } else {
-          return (
-            <Post
-              currentVote={currentVote}
-              key={post.id}
-              post={post}
-              voteCount={voteCount}
-              commentCount={post.comments.length}
-              subredditName={post.subreddit.name}
-            />
-          );
-        }
+        const postProps = {
+          currentVote,
+          post,
+          voteCount,
+          commentCount: post.comments.length,
+          subredditName: post.subreddit.name,
+        };
+
+        return (
+          <li key={post.id} ref={index === posts.length - 1 ? ref : undefined}>
+            <Post {...postProps} />
+          </li>
+        );
       })}
 
       {isFetchingNextPage && (
