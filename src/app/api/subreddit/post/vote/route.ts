@@ -1,7 +1,11 @@
 import { getAuthSession } from '@/lib/auth';
 import { db } from '@/lib/db';
+import { redis } from '@/lib/redis';
 import { PostVoteValidator } from '@/lib/validators/vote';
+import { CachedPost } from '@/types/redis';
 import { z } from 'zod';
+
+const CACHE_AFTER_UPVOTES = 1;
 
 export async function PATCH(req: Request) {
   try {
@@ -49,6 +53,26 @@ export async function PATCH(req: Request) {
           },
         });
 
+        // Recount the votes
+        const votesAmt = post.votes.reduce((acc, vote) => {
+          if (vote.type === 'UP') return acc + 1;
+          if (vote.type === 'DOWN') return acc - 1;
+          return acc;
+        }, 0);
+
+        if (votesAmt >= CACHE_AFTER_UPVOTES) {
+          const cachePayload: CachedPost = {
+            authorUsername: post.author.username ?? '',
+            content: JSON.stringify(post.content),
+            id: post.id,
+            title: post.title,
+            currentVote: null,
+            createdAt: post.createdAt,
+          };
+
+          await redis.hset(`post:${postId}`, cachePayload); // Store the post data as a hash
+        }
+
         return new Response('OK');
       }
 
@@ -65,6 +89,26 @@ export async function PATCH(req: Request) {
         },
       });
 
+      // Recount the votes
+      const votesAmt = post.votes.reduce((acc, vote) => {
+        if (vote.type === 'UP') return acc + 1;
+        if (vote.type === 'DOWN') return acc - 1;
+        return acc;
+      }, 0);
+
+      if (votesAmt >= CACHE_AFTER_UPVOTES) {
+        const cachePayload: CachedPost = {
+          authorUsername: post.author.username ?? '',
+          content: JSON.stringify(post.content),
+          id: post.id,
+          title: post.title,
+          currentVote: voteType,
+          createdAt: post.createdAt,
+        };
+
+        await redis.hset(`post:${postId}`, cachePayload); // Store the post data as a hash
+      }
+
       return new Response('OK');
     }
 
@@ -76,6 +120,26 @@ export async function PATCH(req: Request) {
         postId,
       },
     });
+
+    // Recount the votes
+    const votesAmt = post.votes.reduce((acc, vote) => {
+      if (vote.type === 'UP') return acc + 1;
+      if (vote.type === 'DOWN') return acc - 1;
+      return acc;
+    }, 0);
+
+    if (votesAmt >= CACHE_AFTER_UPVOTES) {
+      const cachePayload: CachedPost = {
+        authorUsername: post.author.username ?? '',
+        content: JSON.stringify(post.content),
+        id: post.id,
+        title: post.title,
+        currentVote: voteType,
+        createdAt: post.createdAt,
+      };
+
+      await redis.hset(`post:${postId}`, cachePayload); // Store the post data as a hash
+    }
 
     return new Response('OK');
   } catch (error) {
