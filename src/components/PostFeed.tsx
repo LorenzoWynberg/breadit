@@ -49,7 +49,8 @@ const PostFeed: FC<PostFeedProps> = ({ initialPosts, subredditName }) => {
   }, [entry, fetchNextPage]);
 
   const posts = data?.pages.flatMap((page) => page) ?? initialPosts;
-  if (!posts && !initialPosts) return null;
+  if (session === undefined || !posts.length) return null;
+
   return (
     <ul className="flex flex-col col-span-2 space-y-6">
       {posts.map((post, index) => {
