@@ -207,7 +207,7 @@ export const Editor: React.FC<EditorProps> = ({ subredditId }) => {
             placeholder="Title"
             className="w-full overflow-hidden text-5xl font-bold bg-transparent appearance-none resize-none focus:outline-none"
           />
-          <div id="editor" className="min-h-[500px]" />
+          <div id="editor" className="min-h-[180px]" />
           <p className="text-sm text-gray-500">
             Use{' '}
             <kbd className="px-1 text-xs uppercase border rounded-md bg-muted">
