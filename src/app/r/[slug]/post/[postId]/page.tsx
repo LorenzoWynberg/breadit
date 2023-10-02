@@ -1,4 +1,5 @@
 import EditorOutput from '@/components/EditorOutput';
+import CommentSection from '@/components/comments/CommentSection';
 import PostVoteServer from '@/components/post-vote/PostVoteServer';
 import { buttonVariants } from '@/components/ui/button';
 import { db } from '@/lib/db';
@@ -75,7 +76,8 @@ const SubRedditPostPage = async ({ params }: SubRedditPostPageProps) => {
               <Loader2 className="w-5 h-5 animate-spin text-zinc-500" />
             }
           >
-            {/* TODO: Comments */}
+            {/* @ts-expect-error Server Component */}
+            <CommentSection postId={post?.id ?? cachedPost.id} />
           </Suspense>
         </div>
       </div>
