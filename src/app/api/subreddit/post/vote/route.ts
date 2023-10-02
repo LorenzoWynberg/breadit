@@ -54,13 +54,13 @@ export async function PATCH(req: Request) {
         });
 
         // Recount the votes
-        const votesAmt = post.votes.reduce((acc, vote) => {
+        const voteCount = post.votes.reduce((acc, vote) => {
           if (vote.type === 'UP') return acc + 1;
           if (vote.type === 'DOWN') return acc - 1;
           return acc;
         }, 0);
 
-        if (votesAmt >= CACHE_AFTER_UPVOTES) {
+        if (voteCount >= CACHE_AFTER_UPVOTES) {
           const cachePayload: CachedPost = {
             authorUsername: post.author.username ?? '',
             content: JSON.stringify(post.content),
@@ -90,13 +90,13 @@ export async function PATCH(req: Request) {
       });
 
       // Recount the votes
-      const votesAmt = post.votes.reduce((acc, vote) => {
+      const voteCount = post.votes.reduce((acc, vote) => {
         if (vote.type === 'UP') return acc + 1;
         if (vote.type === 'DOWN') return acc - 1;
         return acc;
       }, 0);
 
-      if (votesAmt >= CACHE_AFTER_UPVOTES) {
+      if (voteCount >= CACHE_AFTER_UPVOTES) {
         const cachePayload: CachedPost = {
           authorUsername: post.author.username ?? '',
           content: JSON.stringify(post.content),
@@ -122,13 +122,13 @@ export async function PATCH(req: Request) {
     });
 
     // Recount the votes
-    const votesAmt = post.votes.reduce((acc, vote) => {
+    const voteCount = post.votes.reduce((acc, vote) => {
       if (vote.type === 'UP') return acc + 1;
       if (vote.type === 'DOWN') return acc - 1;
       return acc;
     }, 0);
 
-    if (votesAmt >= CACHE_AFTER_UPVOTES) {
+    if (voteCount >= CACHE_AFTER_UPVOTES) {
       const cachePayload: CachedPost = {
         authorUsername: post.author.username ?? '',
         content: JSON.stringify(post.content),
