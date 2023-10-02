@@ -3,6 +3,7 @@ import { Icons } from './Icons';
 import { buttonVariants } from './ui/button';
 import { getAuthSession } from '@/lib/auth';
 import NavUserDropdown from './NavUserDropdown';
+import SearchBar from './SearchBar';
 
 const Navbar = async () => {
   const session = await getAuthSession();
@@ -15,7 +16,7 @@ const Navbar = async () => {
             Breaddit
           </p>
         </Link>
-        {/* Search Bar */}
+        <SearchBar />
         {session?.user ? (
           <NavUserDropdown user={session.user} />
         ) : (
